@@ -69,35 +69,40 @@
     </div>
 
     <script>
-    const form = document.getElementById('flamesForm');
-    const resultDiv = document.getElementById('result');
+        const form = document.getElementById('flamesForm');
+        const resultDiv = document.getElementById('result');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        const name1 = document.getElementById('name1').value;
-        const name2 = document.getElementById('name2').value;
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
 
-        try {
-            const response = await fetch('https://flames-x2lm.onrender.com/save-names', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name1, name2 }),
-            });
-
-            if (response.ok) {
-                const message = await response.text();
-                resultDiv.textContent = message;
-            } else {
-                resultDiv.textContent = 'Failed to send names. Try again!';
+            if (!name1 || !name2) {
+                resultDiv.textContent = "Both names are required!";
+                return;
             }
-        } catch (error) {
-            resultDiv.textContent = 'An error occurred. Please try again later.';
-            console.error(error);
-        }
-    });
-</script>
+
+            try {
+                const response = await fetch('https://flames-x2lm.onrender.com/save-names', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name1, name2 }),
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    resultDiv.textContent = "Flames calculation submitted successfully!";
+                } else {
+                    resultDiv.textContent = "Failed to process your request. Please try again.";
+                }
+            } catch (error) {
+                resultDiv.textContent = "An error occurred. Please check your internet connection.";
+                console.error(error);
+            }
+        });
+    </script>
 </body>
 </html>
