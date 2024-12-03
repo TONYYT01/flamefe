@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLAMES Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    input {
+      margin: 10px;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>FLAMES Calculator</h1>
+  <form id="flamesForm">
+    <input type="text" id="name1" placeholder="Enter First Name" required>
+    <input type="text" id="name2" placeholder="Enter Second Name" required>
+    <button type="button" onclick="calculateFLAMES()">Calculate</button>
+  </form>
+  <div class="result" id="result"></div>
+
+  <script>
+    async function saveNamesToFile(name1, name2) {
+        try {
+            await fetch('https://your-backend-url.com/save-names', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name1, name2 })
+            });
+        } catch (error) {
+            console.error('Error saving names:', error);
+        }
+    }
+
+    function calculateFLAMES() {
+        const name1 = document.getElementById('name1').value.trim().toLowerCase();
+        const name2 = document.getElementById('name2').value.trim().toLowerCase();
+
+        if (!name1 || !name2) {
+            alert('Please enter both names!');
+            return;
+        }
+
+        // Save names to the backend
+        saveNamesToFile(name1, name2);
+
+        // FLAMES calculation logic
+        let combinedName = name1 + name2;
+        for (let char of name1) {
+            if (name2.includes(char)) {
+                combinedName = combinedName.replace(char, '');
+            }
+        }
+        const count = combinedName.length;
+        const flames = ['Friends', 'Love', 'Affection', 'Marriage', 'Enemy', 'Siblings'];
+        let index = 0;
+
+        for (let i = flames.length; i > 1; i--) {
+            index = (index + count - 1) % i;
+            flames.splice(index, 1);
+        }
+
+        document.getElementById('result').textContent = `Your relationship is: ${flames[0]}`;
+    }
+  </script>
+</body>
+</html>
