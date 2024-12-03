@@ -9,23 +9,27 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
         }
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: auto;
             padding: 20px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
         }
         .input-group {
             margin-bottom: 15px;
         }
         .input-group label {
             display: block;
-            font-weight: bold;
             margin-bottom: 5px;
+            font-weight: bold;
         }
         .input-group input {
             width: 100%;
@@ -34,11 +38,13 @@
             border-radius: 5px;
         }
         button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 15px;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
             border: none;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
         }
         button:hover {
@@ -46,8 +52,10 @@
         }
         .result {
             margin-top: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #333;
+            text-align: center;
         }
     </style>
 </head>
@@ -57,15 +65,15 @@
         <form id="flamesForm">
             <div class="input-group">
                 <label for="name1">Your Name:</label>
-                <input type="text" id="name1" required />
+                <input type="text" id="name1" name="name1" required />
             </div>
             <div class="input-group">
                 <label for="name2">Partner's Name:</label>
-                <input type="text" id="name2" required />
+                <input type="text" id="name2" name="name2" required />
             </div>
             <button type="submit">Calculate</button>
         </form>
-        <div class="result" id="result"></div>
+        <div id="result" class="result"></div>
     </div>
 
     <script>
@@ -84,7 +92,7 @@
             }
 
             try {
-                const response = await fetch('https://flames-1.onrender.com/save-names', {
+                const response = await fetch('https://flames-x2lm.onrender.com/save-names', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -93,7 +101,7 @@
                 });
 
                 if (response.ok) {
-                    const result = await response.text();
+                    const message = await response.text();
                     resultDiv.textContent = "Flames calculation submitted successfully!";
                 } else {
                     resultDiv.textContent = "Failed to process your request. Please try again.";
